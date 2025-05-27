@@ -1,0 +1,221 @@
+/* General Resets & Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.6;
+    background-color: #1a1a1a; /* Fondo principal muy oscuro */
+    color: #e0e0e0; /* Texto principal claro */
+}
+
+body {
+    /* No necesitamos display:flex o justify-content:center si .container ocupa el 100% */
+}
+
+.container {
+    width: 100%; /* Ocupar todo el ancho */
+    /* max-width: 1200px; /* ELIMINADO para ancho total */
+    background-color: #2c2c2c; /* Fondo del contenedor ligeramente más claro que el body */
+    box-shadow: 0 0 20px rgba(0,0,0,0.25); /* Sombra más sutil para tema oscuro */
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+header {
+    background-color: #1f1f1f; /* Header muy oscuro */
+    color: #00aaff; /* Color de acento para el título (un azul brillante) */
+    padding: 20px 30px;
+    text-align: center;
+    border-bottom: 4px solid #0077cc; /* Borde de acento más oscuro */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+}
+
+/* Sidebar Navigation */
+#sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background-color: #222222; /* Sidebar oscuro */
+    color: #c0c0c0; /* Texto del sidebar gris claro */
+    padding: 20px;
+    border-right: 1px solid #383838; /* Borde sutil para separar sidebar */
+    overflow-y: auto;
+}
+
+#sidebar h2 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: #00aaff; /* Título del sidebar con color de acento */
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+#chapter-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#chapter-list li a {
+    display: block;
+    color: #b0b0b0; /* Enlaces del sidebar un poco más claros */
+    text-decoration: none;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#chapter-list li a:hover {
+    background-color: #333333; /* Hover un poco más claro */
+    color: #00aaff; /* Color de acento en hover */
+}
+#chapter-list li a.active {
+    background-color: #0077cc; /* Color de acento para el activo */
+    color: #ffffff; /* Texto blanco para el activo */
+}
+
+
+/* Main Content Area */
+#content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #2c2c2c; /* Mismo fondo que .container */
+    overflow-y: auto;
+    color: #e0e0e0; /* Asegurar que el texto del contenido sea claro */
+}
+
+#content h1, #content h2, #content h3, #content h4 {
+    color: #00aaff; /* Encabezados del contenido con color de acento */
+    border-bottom: 1px solid #444; /* Borde inferior más oscuro */
+    padding-bottom: 0.3em;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}
+#content h1:first-child {
+    margin-top: 0;
+}
+
+#content p {
+    margin-bottom: 1em;
+    color: #cccccc; /* Párrafos un poco menos brillantes que el texto principal */
+}
+
+#content ul, #content ol {
+    margin-bottom: 1em;
+    padding-left: 20px;
+}
+
+#content a { /* Estilo general para enlaces dentro del contenido */
+    color: #3498db; /* Un azul más brillante para enlaces */
+    text-decoration: none;
+}
+#content a:hover {
+    text-decoration: underline;
+}
+
+
+#content code:not(pre code) { /* Código inline */
+    background-color: #383838; /* Fondo del código inline oscuro */
+    color: #ff6b6b; /* Un rojo/rosa para el código inline */
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+#content pre { /* Bloques de código */
+    background-color: #1e1e1e; /* Fondo muy oscuro para bloques de código (similar a temas de editor) */
+    color: #d4d4d4; /* Texto claro general para código */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #383838; /* Borde sutil */
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+#content pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+}
+
+/* Para el resaltado de sintaxis de Highlight.js, necesitarás un tema oscuro.
+   En tu index.html, cambia el CSS de Highlight.js a un tema oscuro, por ejemplo:
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+   O dracula.min.css, monokai-sublime.min.css, etc.
+*/
+
+
+#content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+#content th, #content td {
+    border: 1px solid #444; /* Bordes de tabla más oscuros */
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#content th {
+    background-color: #333333; /* Cabecera de tabla oscura */
+    color: #00aaff; /* Texto de cabecera con acento */
+}
+
+.mermaid {
+    text-align: center;
+    margin-bottom: 1.5em;
+    /* Para tema oscuro de Mermaid, en script.js, mermaid.initialize({ theme: 'dark' }); */
+    /* O puedes aplicar filtros CSS si la librería no soporta bien temas oscuros para ciertos diagramas */
+    /* filter: invert(1) hue-rotate(180deg); /* Ejemplo de inversión simple - puede necesitar ajustes */
+}
+/* Si usas el filtro de inversión, asegúrate de que el texto dentro de mermaid siga siendo legible */
+.mermaid text {
+    /* fill: #e0e0e0 !important; /* Ejemplo para forzar color de texto en mermaid */
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1f1f1f; /* Footer muy oscuro */
+    color: #888; /* Texto del footer gris medio */
+    font-size: 0.9em;
+    border-top: 1px solid #383838; /* Borde superior sutil */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+    #sidebar {
+        width: 100%;
+        min-height: auto;
+        overflow-y: visible;
+        border-right: none; /* Quitar borde derecho en mobile */
+        border-bottom: 2px solid #0077cc; /* Borde de acento inferior */
+    }
+    header h1 {
+        font-size: 1.6em;
+    }
+    #content {
+        padding: 20px; /* Menos padding en mobile */
+    }
+}
