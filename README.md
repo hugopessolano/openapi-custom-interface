@@ -5,6 +5,9 @@
 
 This project is an **interactive client** for APIs described by the *OpenAPI Specification*. It allows users to load an API definition, which is then used to **dynamically generate input forms** for each endpoint. Users can fill in parameters and request bodies, execute API calls via an **API Service**, and view the results, which are **displayed** in a user-friendly format, including tabular views and detailed pop-ups. The application manages user input, API responses, and **authentication tokens** persistently across interactions using the **Streamlit Session State**.
 
+## Documentation here: 
+https://hugopessolano.github.io/openapi-custom-interface/
+
 ## Features
 
 *   **Dynamic UI for API Interaction:** Leverages Streamlit to create an interactive user experience.
