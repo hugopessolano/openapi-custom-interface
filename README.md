@@ -45,53 +45,51 @@ The application's architecture revolves around several key components that inter
 ```mermaid
 flowchart TD
     subgraph "User Interface (Streamlit)"
-        UI_Sidebar["Sidebar (API Load, Auth Status)"]
-        UI_MainArea["Main Area (Endpoint List, Forms, Responses)"]
-        UI_DetailDialog["Detail Dialog (for nested data)"]
+        UI_Sidebar["Sidebar"]
+        UI_MainArea["Main Area (Forms, Responses)"]
+        UI_DetailDialog["Detail Dialog"]
     end
 
-    subgraph "Core Application Logic & State"
-        A0["Streamlit Session State (st.session_state)"]
-        A1["OpenAPI Specification Module (api_service.py - load_spec)"]
-        A2["API Service (api_service.py - execute_request)"]
-        A3["Dynamic Form Generator (form_generator.py)"]
-        A4["Request/Response Data Handling (form_generator.py - build_json, api_service.py - parse_response)"]
-        A6["Authentication Management (api_service.py, sidebar.py)"]
-        A7["Response Display (response_display.py)"]
-        Utils["Utility Functions (utils.py)"]
+    subgraph "Core Logic & State"
+        SessState["Session State (st.session_state)"]
+        SpecModule["OpenAPI Spec Module"]
+        APIService["API Service"]
+        FormGen["Dynamic Form Gen"]
+        DataHandle["Req/Res Data Handling"]
+        AuthManage["Auth Management"]
+        ResDisplay["Response Display"]
+        Utils["Utilities"]
     end
     
     ExternalAPI["External API Server"]
 
-    UI_Sidebar -- "Triggers Load API" --> A1
-    A1 -- "Fetches Spec From" --> ExternalAPI
-    A1 -- "Stores Spec In" --> A0
+    UI_Sidebar -- "Load API" --> SpecModule
+    SpecModule -- "Fetches Spec" --> ExternalAPI
+    SpecModule -- "Stores Spec" --> SessState
 
-    UI_MainArea -- "User selects endpoint" --> A3
-    A3 -- "Reads Spec From" --> A0
-    A3 -- "Generates Form Fields In" --> UI_MainArea
-    A3 -- "Links Form Fields To" --> A0
+    UI_MainArea -- "Select Endpoint" --> FormGen
+    FormGen -- "Reads Spec" --> SessState
+    FormGen -- "Generates Forms In" --> UI_MainArea
+    FormGen -- "Links Forms To" --> SessState
 
-    UI_MainArea -- "User fills form, Clicks Execute" --> A2
-    A2 -- "Reads form data, auth_token, spec from" --> A0
-    A2 -- "Uses (for building request body)" --> A4
-    A2 -- "Handles Auth Logic via" --> A6
-    A6 -- "Updates Auth Token In" --> A0
-    A2 -- "Sends HTTP Request To" --> ExternalAPI
-    ExternalAPI -- "HTTP Response" --> A2
-    A2 -- "Uses (for parsing response)" --> A4
-    A2 -- "Stores Response In" --> A0
-    A2 -- "Triggers UI Rerun" --> UI_MainArea
+    UI_MainArea -- "Execute Request" --> APIService
+    APIService -- "Reads Inputs/Token" --> SessState
+    APIService -- "Uses" --> DataHandle
+    APIService -- "Auth" --> AuthManage
+    AuthManage -- "Updates Token" --> SessState
+    APIService -- "HTTP Request" --> ExternalAPI
+    ExternalAPI -- "HTTP Response" --> APIService
+    APIService -- "Stores Response" --> SessState
     
-    UI_MainArea -- "Renders Response via" --> A7
-    A7 -- "Reads Response Data From" --> A0
-    A7 -- "Displays in" --> UI_MainArea
-    A7 -- "Triggers Detail Dialog via" --> UI_DetailDialog
-    UI_DetailDialog -- "Reads nested data from" --> A0
+    UI_MainArea -- "Renders Via" --> ResDisplay
+    ResDisplay -- "Reads Response" --> SessState
+    ResDisplay -- "Displays In" --> UI_MainArea
+    ResDisplay -- "Triggers" --> UI_DetailDialog
+    UI_DetailDialog -- "Reads Nested Data" --> SessState
 
-    A3 -- "Uses" --> Utils
-    A4 -- "Uses" --> Utils
-    A2 -- "Uses" --> Utils
+    FormGen -- "Uses" --> Utils
+    DataHandle -- "Uses" --> Utils
+    APIService -- "Uses" --> Utils
 ```
 
 ## Getting Started
