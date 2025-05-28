@@ -44,52 +44,34 @@ The application's architecture revolves around several key components that inter
 
 ```mermaid
 flowchart TD
-    subgraph "User Interface (Streamlit)"
-        UI_Sidebar["Sidebar"]
-        UI_MainArea["Main Area (Forms, Responses)"]
-        UI_DetailDialog["Detail Dialog"]
-    end
-
-    subgraph "Core Logic & State"
-        SessState["Session State (st.session_state)"]
-        SpecModule["OpenAPI Spec Module"]
-        APIService["API Service"]
-        FormGen["Dynamic Form Gen"]
-        DataHandle["Req/Res Data Handling"]
-        AuthManage["Auth Management"]
-        ResDisplay["Response Display"]
-        Utils["Utilities"]
-    end
+    UI["User Interface (Streamlit)"]
+    SessionState["Streamlit Session State"]
+    OpenAPISpec["OpenAPI Spec Handling"]
+    FormGenerator["Dynamic Form Generation"]
+    APIService["API Service Layer"]
+    AuthManager["Authentication Mgmt"]
+    ExternalAPI["External API"]
     
-    ExternalAPI["External API Server"]
+    UI -- "User Input / Triggers" --> OpenAPISpec
+    UI -- "User Input / Triggers" --> FormGenerator
+    UI -- "User Input / Triggers" --> APIService
+    UI -- "User Input / Triggers" --> AuthManager
 
-    UI_Sidebar -- "Load API" --> SpecModule
-    SpecModule -- "Fetches Spec" --> ExternalAPI
-    SpecModule -- "Stores Spec" --> SessState
-
-    UI_MainArea -- "Select Endpoint" --> FormGen
-    FormGen -- "Reads Spec" --> SessState
-    FormGen -- "Generates Forms In" --> UI_MainArea
-    FormGen -- "Links Forms To" --> SessState
-
-    UI_MainArea -- "Execute Request" --> APIService
-    APIService -- "Reads Inputs/Token" --> SessState
-    APIService -- "Uses" --> DataHandle
-    APIService -- "Auth" --> AuthManage
-    AuthManage -- "Updates Token" --> SessState
-    APIService -- "HTTP Request" --> ExternalAPI
-    ExternalAPI -- "HTTP Response" --> APIService
-    APIService -- "Stores Response" --> SessState
+    OpenAPISpec -- "Fetches/Stores Spec" --> SessionState
+    OpenAPISpec -- "Interacts" --> ExternalAPI
     
-    UI_MainArea -- "Renders Via" --> ResDisplay
-    ResDisplay -- "Reads Response" --> SessState
-    ResDisplay -- "Displays In" --> UI_MainArea
-    ResDisplay -- "Triggers" --> UI_DetailDialog
-    UI_DetailDialog -- "Reads Nested Data" --> SessState
+    FormGenerator -- "Reads Spec from/Stores Input in" --> SessionState
+    FormGenerator -- "Renders Forms to" --> UI
 
-    FormGen -- "Uses" --> Utils
-    DataHandle -- "Uses" --> Utils
-    APIService -- "Uses" --> Utils
+    AuthManager -- "Manages Token in" --> SessionState
+    AuthManager -- "Authenticates with" --> APIService
+    
+    APIService -- "Uses Data/Token from" --> SessionState
+    APIService -- "Sends Requests to" --> ExternalAPI
+    ExternalAPI -- "Sends Responses to" --> APIService
+    APIService -- "Stores Responses in" --> SessionState
+    
+    SessionState -- "Provides Data to" --> UI
 ```
 
 ## Getting Started
